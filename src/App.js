@@ -1,24 +1,56 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import * as ROUTES from "./constants/routes";
+import Signup from "./pages/Signup";
+import Login from "./pages/Login";
+import HomePage from "./pages/HomePage";
+import useAuthListener from "./hooks/use-auth-listener";
+import PrivateRoute from "./UI/PrivateRoute";
+import UserContext from "./contexts/UserContext";
+import Layout from "./UI/Layout";
+import NotFound from "./pages/NotFound";
+import Workouts from "./pages/Workouts";
+import CreateWorkoutTitle from "./components/CreateWorkoutTitle";
+import { useLocation } from "react-router-dom";
 
 function App() {
+  const user = useAuthListener();
+  const location = useLocation();
+  console.log(location.pathname);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={user}>
+      <Routes>
+        <Route path={ROUTES.SIGN_UP} element={<Signup />} />
+        <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route
+          path={ROUTES.DASHBOARD}
+          element={
+            <Layout>
+              <PrivateRoute auth={user}>
+                <HomePage />
+              </PrivateRoute>
+            </Layout>
+          }
+        />
+        <Route
+          path={ROUTES.WORKOUTS + "/*"}
+          element={
+            <Layout>
+              <PrivateRoute auth={user}>
+                <Workouts />
+              </PrivateRoute>
+            </Layout>
+          }
+        ></Route>
+        <Route
+          path="*"
+          element={
+            <Layout>
+              <NotFound />
+            </Layout>
+          }
+        />
+      </Routes>
+    </UserContext.Provider>
   );
 }
 

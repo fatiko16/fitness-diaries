@@ -1,7 +1,4 @@
-import React from "react";
-import WorkoutPreview from "./WorkoutPreview";
-import { Outlet, useNavigate } from "react-router-dom";
-import * as ROUTES from "../constants/routes";
+import { createContext } from "react";
 
 const DUMMY_WORKOUTS = [
   {
@@ -65,30 +62,7 @@ const DUMMY_WORKOUTS = [
     userID: "Pkkaq8smAKUL2DhmabidDzQjPRT2",
   },
 ];
-function WorkoutList() {
-  const navigate = useNavigate();
 
-  return (
-    <div className="container mt-6 mx-auto max-w-screen-md">
-      <Outlet />
-      {DUMMY_WORKOUTS.map((workout) => {
-        return (
-          <WorkoutPreview
-            key={workout.subtitle}
-            title={workout.subtitle}
-            description={workout.description}
-            moves={workout.moves}
-          />
-        );
-      })}
-      <div
-        className="bg-emerald-600 py-2 px-1 rounded"
-        onClick={() => navigate(ROUTES.ADD_WORKOUT)}
-      >
-        <button className="p-1 text-white font-bold">+ Add New Workout</button>
-      </div>
-    </div>
-  );
-}
+const WorkoutContext = createContext(null);
 
-export default WorkoutList;
+export default WorkoutContext;

@@ -7,6 +7,7 @@ import {
 import { collection, addDoc } from "firebase/firestore";
 
 const userColRef = collection(db, "users");
+const workoutsColsRef = collection(db, "workouts");
 export async function signUp(
   email,
   password,
@@ -56,4 +57,16 @@ export async function logIn(email, password, setEmail, setPassword, setError) {
     setPassword("");
     setError(error.message);
   }
+}
+
+export async function createWorkoutTitle(title, subtitle, userID) {
+  try {
+    const docRef = await addDoc(workoutsColsRef, {
+      title: title,
+      subtitle: subtitle,
+      description: null,
+      moves: [],
+      userID: null,
+    });
+  } catch (error) {}
 }

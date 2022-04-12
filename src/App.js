@@ -9,13 +9,10 @@ import UserContext from "./contexts/UserContext";
 import Layout from "./UI/Layout";
 import NotFound from "./pages/NotFound";
 import Workouts from "./pages/Workouts";
-import CreateWorkoutTitle from "./components/CreateWorkoutTitle";
-import { useLocation } from "react-router-dom";
 
 function App() {
   const user = useAuthListener();
-  const location = useLocation();
-  console.log(location.pathname);
+
   return (
     <UserContext.Provider value={user}>
       <Routes>

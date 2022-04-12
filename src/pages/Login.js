@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
-import useAuthListener from "../hooks/use-auth-listener";
 import { logIn } from "../libs/firebase";
 import { invalidReasonLogIn } from "../utils/authUtils";
 function Login() {
-  const { user } = useAuthListener();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const isInvalidForm = email === "" || password === "";
-  console.log(user);
   const logInHandler = async (event) => {
     event.preventDefault();
     if (isInvalidForm) {

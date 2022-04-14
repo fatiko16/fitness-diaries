@@ -21,7 +21,14 @@ function CreateWorkoutTitle(props) {
     if (isInvalid) {
       setError("Cannot submit the form with empty fields");
     }
-    createWorkoutTitle(title, subtitle, user.user.uid);
+    createWorkoutTitle(
+      title,
+      subtitle,
+      user.user.uid,
+      setTitle,
+      setSubtitle,
+      setError
+    );
     navigate("/workouts");
     props.onClose();
   };

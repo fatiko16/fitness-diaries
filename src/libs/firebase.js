@@ -4,7 +4,7 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
 
 const userColRef = collection(db, "users");
 const workoutsColsRef = collection(db, "workouts");
@@ -59,14 +59,38 @@ export async function logIn(email, password, setEmail, setPassword, setError) {
   }
 }
 
-export async function createWorkoutTitle(title, subtitle, userID) {
+export async function createWorkoutTitle(
+  title,
+  subtitle,
+  userID,
+  setTitle,
+  setSubtitle,
+  setError
+) {
   try {
-    const docRef = await addDoc(workoutsColsRef, {
+    await addDoc(workoutsColsRef, {
       title: title,
       subtitle: subtitle,
-      description: null,
+      description: "",
       moves: [],
-      userID: null,
+      userID: userID,
     });
-  } catch (error) {}
+    setTitle("");
+    setSubtitle("");
+  } catch (error) {
+    setError(error.message);
+    console.log("Something went wrong while creating a new title");
+  }
+}
+
+export async function getDocsOnce(userID) {
+  const q = query(collection(db, "workouts"), where("userID", "==", userID));
+
+  const querySnapshot = await getDocs(q);
+  const data = [];
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+    data.push(doc.data());
+  });
+  return data;
 }

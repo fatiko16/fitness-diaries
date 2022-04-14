@@ -5,9 +5,13 @@ import CreateWorkoutTitle from "../components/CreateWorkoutTitle";
 import { useNavigate } from "react-router-dom";
 import WorkoutList from "../components/WorkoutList";
 import AddWorkout from "../components/AddWorkout";
-const allWorkouts = ["Back", "Legs", "Arms", "Chest", "Arms + Legs"];
+import useWorkouts from "../hooks/use-workouts";
+import * as ROUTES from "../constants/routes";
+import EditWorkout from "../components/EditWorkout";
 
 function Workouts() {
+  const { workouts, titles, workoutMap } = useWorkouts();
+  console.log(workoutMap);
   const navigate = useNavigate();
   const [workoutType, setWorkoutType] = useState("All");
 
@@ -27,7 +31,7 @@ function Workouts() {
         </h1>
         <Dropdown
           onOptionChange={setWorkoutType}
-          options={allWorkouts}
+          options={titles}
           onCreateList={createWorkoutTitleHandler}
         />
       </div>
@@ -37,9 +41,23 @@ function Workouts() {
           path="/create-title"
           element={<CreateWorkoutTitle onClose={() => setWorkoutType("All")} />}
         />
-        <Route path=":workoutTitle" element={<WorkoutList />}>
+
+        <Route
+          path=":workoutTitle"
+          element={<WorkoutList workouts={workoutMap} />}
+        >
           <Route path="add-workout" element={<AddWorkout />} />
         </Route>
+        <Route
+          path={ROUTES.EDIT_WORKOUT}
+          element={
+            workoutMap.size > 0 ? (
+              <EditWorkout workouts={workoutMap} />
+            ) : (
+              <h1 className="text-center text-2xl">Loading...</h1>
+            )
+          }
+        ></Route>
       </Routes>
     </>
   );

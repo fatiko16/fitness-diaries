@@ -1,6 +1,6 @@
 import React from "react";
 import WorkoutPreview from "./WorkoutPreview";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 
 const DUMMY_WORKOUTS = [
@@ -65,22 +65,29 @@ const DUMMY_WORKOUTS = [
     userID: "Pkkaq8smAKUL2DhmabidDzQjPRT2",
   },
 ];
-function WorkoutList() {
+function WorkoutList(props) {
   const navigate = useNavigate();
+  const params = useParams();
+  console.log(props.workouts);
+
+  const workouts = props.workouts.get(params.workoutTitle);
+  console.log(workouts);
 
   return (
     <div className="container mt-6 mx-auto max-w-screen-md">
       <Outlet />
-      {DUMMY_WORKOUTS.map((workout) => {
-        return (
-          <WorkoutPreview
-            key={workout.subtitle}
-            title={workout.subtitle}
-            description={workout.description}
-            moves={workout.moves}
-          />
-        );
-      })}
+      {workouts &&
+        workouts.map((workout) => {
+          return (
+            <WorkoutPreview
+              key={workout.subtitle}
+              title={workout.subtitle}
+              description={workout.description}
+              moves={workout.moves}
+              mainTitle={workout.title}
+            />
+          );
+        })}
       <div
         className="bg-emerald-600 py-2 px-1 rounded"
         onClick={() => navigate(ROUTES.ADD_WORKOUT)}

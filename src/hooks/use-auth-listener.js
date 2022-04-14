@@ -12,7 +12,7 @@ function useAuthListener() {
         setUser(user);
         localStorage.setItem("authUser", JSON.stringify(user));
       } else {
-        localStorage.removeItem("auhtUser");
+        localStorage.removeItem("authUser");
         setUser(null);
       }
     });

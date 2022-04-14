@@ -19,6 +19,7 @@ function classNames(...classes) {
 
 export default function Header() {
   function logOutHandler() {
+    localStorage.removeItem();
     signOut(auth);
   }
   return (
@@ -109,6 +110,7 @@ export default function Header() {
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
                             )}
+                            href="/"
                           >
                             Your Profile
                           </a>
@@ -117,7 +119,7 @@ export default function Header() {
                       <Menu.Item>
                         {({ active }) => (
                           <a
-                            href="#"
+                            href="/"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"

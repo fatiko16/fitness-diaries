@@ -6,11 +6,9 @@ import HomePage from "./pages/HomePage";
 import useAuthListener from "./hooks/use-auth-listener";
 import PrivateRoute from "./UI/PrivateRoute";
 import UserContext from "./contexts/UserContext";
-import WorkoutContext from "./contexts/WorkoutContext";
 import Layout from "./UI/Layout";
 import NotFound from "./pages/NotFound";
 import Workouts from "./pages/Workouts";
-import EditWorkout from "./components/EditWorkout";
 
 function App() {
   const user = useAuthListener();

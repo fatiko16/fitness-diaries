@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Dropdown from "../components/Dropdown";
+import Dropdown from "../components/WorkoutTitleDropdown";
 import { Routes, Route, Outlet } from "react-router-dom";
 import CreateWorkoutTitle from "../components/CreateWorkoutTitle";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,6 @@ import EditWorkout from "../components/EditWorkout";
 
 function Workouts() {
   const { workouts, titles, workoutMap } = useWorkouts();
-  console.log(workoutMap);
   const navigate = useNavigate();
   const [workoutType, setWorkoutType] = useState("All");
 

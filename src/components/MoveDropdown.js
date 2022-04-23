@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { ChevronDoubleRightIcon, XIcon } from "@heroicons/react/solid";
 import Move from "./Move";
-
+//Component Under Moves
 function MoveDropdown(props) {
   const moveInfo = props.moveInfo;
   const [isOpen, setIsOpen] = useState(false);
+  console.log(moveInfo);
 
   const iconClasses = isOpen ? "w-6 rotate-90" : "w-6";
 
@@ -25,6 +26,7 @@ function MoveDropdown(props) {
               repetition={repetition}
               weight={weight}
               index={index}
+              key={moveInfo.title + index}
               moveTitle={moveInfo.title}
             />
           );

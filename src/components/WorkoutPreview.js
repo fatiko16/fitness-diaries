@@ -40,6 +40,7 @@ function WorkoutPreview(props) {
         >
           Edit
         </button>
+        <button className="bg-white px-2 py-1 rounded mt-2">Delete</button>
       </div>
     </div>
   );

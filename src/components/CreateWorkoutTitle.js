@@ -18,6 +18,7 @@ function CreateWorkoutTitle(props) {
 
   const createTitleHandler = (event) => {
     event.preventDefault();
+
     if (isInvalid) {
       setError("Cannot submit the form with empty fields");
     }

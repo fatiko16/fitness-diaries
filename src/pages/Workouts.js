@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../components/WorkoutTitleDropdown";
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, useParams } from "react-router-dom";
 import CreateWorkoutTitle from "../components/CreateWorkoutTitle";
 import { useNavigate } from "react-router-dom";
 import WorkoutList from "../components/WorkoutList";
@@ -11,8 +11,10 @@ import EditWorkout from "../components/EditWorkout";
 
 function Workouts() {
   const { workouts, titles, workoutMap } = useWorkouts();
+  const params = useParams();
   const navigate = useNavigate();
-  const [workoutType, setWorkoutType] = useState("All");
+
+  const [workoutType, setWorkoutType] = useState(params["*"]);
 
   useEffect(() => {
     document.title = "Fitness Diaries - My Workouts";
@@ -25,13 +27,19 @@ function Workouts() {
   return (
     <>
       <div className="container mx-auto flex  items-center justify-between">
-        <h1 className="text-center font-bold text-3xl mt-4">
-          {workoutType} Workouts
-        </h1>
+        <div className="flex items-center justify-center">
+          <h1 className="text-center font-bold text-3xl mt-4">
+            {workoutType} Workouts
+          </h1>
+          <button className="ml-4 mt-4 p-1 rounded border-2 border-slate-500 hover:backdrop-brightness-50">
+            Delete Title
+          </button>
+        </div>
         <Dropdown
           onOptionChange={setWorkoutType}
           options={titles}
           onCreateList={createWorkoutTitleHandler}
+          chosenWorkout={workoutType}
         />
       </div>
       <Outlet />

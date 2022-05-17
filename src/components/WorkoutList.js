@@ -68,8 +68,9 @@ const DUMMY_WORKOUTS = [
 function WorkoutList(props) {
   const navigate = useNavigate();
   const params = useParams();
-  console.log(props.workouts);
-
+  console.log(props.workouts, "props.workouts");
+  console.log(params.workoutTitle, "params,workoutTitle");
+  const isDefault = params.workoutTitle === "All" ? true : false;
   const workouts = props.workouts.get(params.workoutTitle);
   console.log(workouts);
 
@@ -88,12 +89,16 @@ function WorkoutList(props) {
             />
           );
         })}
-      <div
-        className="bg-emerald-600 py-2 px-1 rounded"
-        onClick={() => navigate(ROUTES.ADD_WORKOUT)}
-      >
-        <button className="p-1 text-white font-bold">+ Add New Workout</button>
-      </div>
+      {!isDefault && (
+        <div
+          className="bg-emerald-600 py-2 px-1 rounded"
+          onClick={() => navigate(ROUTES.ADD_WORKOUT)}
+        >
+          <button className="p-1 text-white font-bold">
+            + Add New Workout
+          </button>
+        </div>
+      )}
     </div>
   );
 }

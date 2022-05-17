@@ -50,7 +50,8 @@ function EditWorkout(props) {
             <Moves />
           </MovesProvider>
           <button className="text-xl text-yellow-50 px-2 py-2 bg-green-800 rounded my-3">
-            Add a new one <PlusIcon className="-mr-1 ml-2 h-5 w-5 inline" />
+            Add a new move
+            <PlusIcon className="-mr-1 ml-2 h-5 w-5 inline" />
           </button>
 
           <button></button>

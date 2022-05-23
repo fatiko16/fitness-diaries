@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import Modal from "../UI/Modal";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
-import { createWorkoutTitle } from "../libs/firebase";
+import { createNewWorkout } from "../libs/firebase";
+import * as ROUTES from "../constants/routes";
 
 function AddWorkout() {
   const navigate = useNavigate();
@@ -18,17 +19,33 @@ function AddWorkout() {
     const originalLocation = `/workouts/${locationDismantled[2]}`;
     navigate(originalLocation);
   };
+
+  const isFormInvalid =
+    params.workoutTitle && title === "" && description === "";
+
   const createTitleHandler = (event) => {
     event.preventDefault();
-    createWorkoutTitle(params.workoutTitle, title);
-    console.log(title, description, "title,description");
-    console.log(user.user.uid);
-    console.log(params.workoutTitle);
-    console.log(location);
+    if (isFormInvalid) {
+      setError("Main Title or Workout Title or Description is empty!!");
+      return;
+    }
+
+    createNewWorkout(
+      params.workoutTitle,
+      title,
+      description,
+      user.user.uid,
+      setError
+    );
+
+    setDescription("");
+    setTitle("");
+    navigate(ROUTES.WORKOUTS + "/" + params.workoutTitle);
   };
   return (
     <Modal onClose={closeModalHandler}>
       <div className="flex flex-col mx-auto max-w-screen-md bg-emerald-600 px-4 rounded-2xl mt-4">
+        {error && <p className="text-red-600">{error}</p>}
         <h1 className="text-center text-white font-bold text-4xl py-2 mb-4">
           Create a new Workout!
         </h1>

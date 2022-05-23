@@ -4,10 +4,19 @@ import {
   updateProfile,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { collection, addDoc, getDocs, where, query } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  where,
+  query,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 
 const userColRef = collection(db, "users");
 const workoutsColsRef = collection(db, "workouts");
+
 export async function signUp(
   email,
   password,
@@ -58,7 +67,7 @@ export async function logIn(email, password, setEmail, setPassword, setError) {
     setError(error.message);
   }
 }
-
+//Used in CreateWorkoutTitle.js
 export async function createWorkoutTitle(
   title,
   subtitle,
@@ -80,6 +89,36 @@ export async function createWorkoutTitle(
   } catch (error) {
     setError(error.message);
     console.log("Something went wrong while creating a new title");
+  }
+}
+//Used in AddWorkout.js
+export async function createNewWorkout(
+  mainTitle,
+  title,
+  description,
+  userID,
+  setError
+) {
+  try {
+    await addDoc(workoutsColsRef, {
+      title: mainTitle,
+      subtitle: title,
+      description: description,
+      moves: [],
+      userID,
+    });
+  } catch (error) {
+    setError(error.message);
+    console.log("Something went wrong while adding new workout");
+  }
+}
+
+export async function deleteWorkout(id) {
+  try {
+    await deleteDoc(doc(workoutsColsRef, id));
+  } catch (error) {
+    console.log("Something went wrong while deleting data");
+    console.log(error);
   }
 }
 

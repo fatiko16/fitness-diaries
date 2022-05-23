@@ -9,7 +9,6 @@ function classNames(...classes) {
 }
 
 export default function Dropdown(props) {
-  console.log(props, "dropdown props");
   const navigate = useNavigate();
   const [chosenOption, setChosenOption] = useState(props.chosenWorkout);
 

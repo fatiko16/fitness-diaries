@@ -68,8 +68,7 @@ const DUMMY_WORKOUTS = [
 function WorkoutList(props) {
   const navigate = useNavigate();
   const params = useParams();
-  console.log(props.workouts, "props.workouts");
-  console.log(params.workoutTitle, "params,workoutTitle");
+
   const isDefault = params.workoutTitle === "All" ? true : false;
   const workouts = props.workouts.get(params.workoutTitle);
   console.log(workouts);

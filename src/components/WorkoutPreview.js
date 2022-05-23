@@ -4,6 +4,7 @@ import * as ROUTES from "../constants/routes";
 
 function WorkoutPreview(props) {
   const navigate = useNavigate();
+
   const openEditPageHandler = () => {
     navigate({
       pathname: "/workouts" + ROUTES.EDIT_WORKOUT,
@@ -12,6 +13,11 @@ function WorkoutPreview(props) {
         title: props.title,
       }).toString(),
     });
+  };
+
+  const deleteHandler = (event) => {
+    event.preventDefault();
+    console.log(props);
   };
   return (
     <div
@@ -40,7 +46,12 @@ function WorkoutPreview(props) {
         >
           Edit
         </button>
-        <button className="bg-white px-2 py-1 rounded mt-2">Delete</button>
+        <button
+          className="bg-white px-2 py-1 rounded mt-2"
+          onClick={deleteHandler}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );

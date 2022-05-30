@@ -9,7 +9,7 @@ import * as ROUTES from "../constants/routes";
 const navigation = [
   { name: "Home", to: ROUTES.DASHBOARD, current: true },
   { name: "Team", to: "#", current: false },
-  { name: "My Workouts", to: ROUTES.WORKOUTS, current: false },
+  { name: "My Workouts", to: ROUTES.WORKOUTS + "/All", current: false },
   { name: "Diaries", to: ROUTES.DIARIES, current: false },
 ];
 

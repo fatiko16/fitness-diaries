@@ -7,11 +7,16 @@ function WorkoutList(props) {
   const navigate = useNavigate();
   const params = useParams();
 
+  let workouts = [];
   const isDefault = params.workoutTitle === "All" ? true : false;
-  console.log(props);
-  const workouts = props.workouts.get(params.workoutTitle);
-  console.log(workouts);
 
+  if (isDefault) {
+    props.workouts.forEach((titleWorkouts) => {
+      titleWorkouts.forEach((workout) => workouts.push(workout));
+    });
+  } else {
+    workouts = props.workouts.get(params.workoutTitle);
+  }
   return (
     <div className="container mt-6 mx-auto max-w-screen-md">
       <Outlet />

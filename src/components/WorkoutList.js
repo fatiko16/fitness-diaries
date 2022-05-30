@@ -3,73 +3,12 @@ import WorkoutPreview from "./WorkoutPreview";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
 
-const DUMMY_WORKOUTS = [
-  {
-    title: "Legs",
-    subtitle: "Quads + Calves",
-    description:
-      "General Leg workout with squad, leg press plus calves and arms",
-    moves: [
-      "Squat",
-      "Leg Press",
-      "Calves with Leg Press Machine",
-      "Bicep Curls",
-      "Rope Pull Down",
-    ],
-    Squat: ["15x135", "10x185", "10x185", "10x185"],
-    userID: "Pkkaq8smAKUL2DhmabidDzQjPRT2",
-  },
-  {
-    title: "Arms",
-    subtitle: "Biceps + Triceps",
-    description:
-      "General Leg workout with squad, leg press plus calves and arms",
-    moves: [
-      "Squat",
-      "Leg Press",
-      "Calves with Leg Press Machine",
-      "Bicep Curls",
-      "Rope Pull Down",
-    ],
-    Squat: ["15x135", "10x185", "10x185", "10x185"],
-    userID: "Pkkaq8smAKUL2DhmabidDzQjPRT2",
-  },
-  {
-    title: "Back",
-    subtitle: "Row",
-    description:
-      "General Leg workout with squad, leg press plus calves and arms",
-    moves: [
-      "Squat",
-      "Leg Press",
-      "Calves with Leg Press Machine",
-      "Bicep Curls",
-      "Rope Pull Down",
-    ],
-    Squat: ["15x135", "10x185", "10x185", "10x185"],
-    userID: "Pkkaq8smAKUL2DhmabidDzQjPRT2",
-  },
-  {
-    title: "Chest",
-    subtitle: "Bench",
-    description:
-      "General Leg workout with squad, leg press plus calves and arms",
-    moves: [
-      "Squat",
-      "Leg Press",
-      "Calves with Leg Press Machine",
-      "Bicep Curls",
-      "Rope Pull Down",
-    ],
-    Squat: ["15x135", "10x185", "10x185", "10x185"],
-    userID: "Pkkaq8smAKUL2DhmabidDzQjPRT2",
-  },
-];
 function WorkoutList(props) {
   const navigate = useNavigate();
   const params = useParams();
 
   const isDefault = params.workoutTitle === "All" ? true : false;
+  console.log(props);
   const workouts = props.workouts.get(params.workoutTitle);
   console.log(workouts);
 
@@ -80,7 +19,8 @@ function WorkoutList(props) {
         workouts.map((workout) => {
           return (
             <WorkoutPreview
-              key={workout.subtitle}
+              key={workout.id}
+              itemID={workout.id}
               title={workout.subtitle}
               description={workout.description}
               moves={workout.moves}

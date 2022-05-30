@@ -1,4 +1,4 @@
-import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import { useContext, useEffect, useState } from "react";
 import { db } from "../firebase";
 import UserContext from "../contexts/UserContext";
@@ -31,7 +31,7 @@ function useWorkouts() {
     const unsuscribe = onSnapshot(q, (querySnapShot) => {
       const data = [];
       querySnapShot.forEach((doc) => {
-        data.push(doc.data());
+        data.push({ ...doc.data(), id: doc.id });
       });
       setWorkouts(data);
     });

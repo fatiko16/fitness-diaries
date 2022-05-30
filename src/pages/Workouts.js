@@ -13,6 +13,7 @@ function Workouts() {
   const { workouts, titles, workoutMap } = useWorkouts();
   const params = useParams();
   const navigate = useNavigate();
+  console.log(workoutMap);
 
   const [workoutType, setWorkoutType] = useState(params["*"]);
 

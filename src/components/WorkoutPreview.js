@@ -1,7 +1,7 @@
 import React from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
 import * as ROUTES from "../constants/routes";
-
+import { deleteWorkout } from "../libs/firebase";
 function WorkoutPreview(props) {
   const navigate = useNavigate();
 
@@ -17,7 +17,8 @@ function WorkoutPreview(props) {
 
   const deleteHandler = (event) => {
     event.preventDefault();
-    console.log(props);
+    event.stopPropagation();
+    deleteWorkout(props.itemID);
   };
   return (
     <div

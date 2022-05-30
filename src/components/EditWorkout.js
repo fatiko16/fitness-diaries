@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/solid";
 import Moves from "./Moves";
 import { MovesProvider } from "../contexts/MovesContext";
+import { updateWorkout } from "../libs/firebase";
 
 function EditWorkout(props) {
   const [searchParams] = useSearchParams();
@@ -18,8 +19,16 @@ function EditWorkout(props) {
     const originalLocation = `/workouts/${workout.title}`;
     navigate(originalLocation);
   };
-  const createTitleHandler = (event) => {
+
+  const editWorkoutHandler = (event) => {
     event.preventDefault();
+    const newValue = {
+      ...workout,
+      subtitle: title,
+      description: description,
+    };
+    updateWorkout(workout.id, newValue);
+    console.log("I am being clicked");
   };
 
   return (
@@ -27,7 +36,7 @@ function EditWorkout(props) {
       <h1 className="text-center text-white font-bold text-4xl py-2 mb-4">
         Edit your workout
       </h1>
-      <form action="POST" onSubmit={createTitleHandler}>
+      <form action="POST" onSubmit={editWorkoutHandler}>
         <input
           aria-label="Your workout title"
           type="text"

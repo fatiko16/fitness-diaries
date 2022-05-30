@@ -12,6 +12,7 @@ import {
   query,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 
 const userColRef = collection(db, "users");
@@ -114,10 +115,21 @@ export async function createNewWorkout(
 }
 
 export async function deleteWorkout(id) {
+  const docRef = doc(workoutsColsRef, id);
   try {
-    await deleteDoc(doc(workoutsColsRef, id));
+    await deleteDoc(docRef);
   } catch (error) {
     console.log("Something went wrong while deleting data");
+    console.log(error);
+  }
+}
+
+export async function updateWorkout(id, newValues) {
+  const docRef = doc(workoutsColsRef, id);
+  try {
+    await updateDoc(docRef, newValues);
+  } catch (error) {
+    console.log("Something went wrong while updating a document.");
     console.log(error);
   }
 }

@@ -9,12 +9,12 @@ const fetchedData = [
   },
 ];
 
-export function MovesProvider({ children }) {
-  const [moves, setMoves] = useState(fetchedData);
+export function MovesProvider(props) {
+  const [moves, setMoves] = useState(props.moves);
 
   return (
     <MovesContext.Provider value={{ moves, setMoves }}>
-      {children}
+      {props.children}
     </MovesContext.Provider>
   );
 }

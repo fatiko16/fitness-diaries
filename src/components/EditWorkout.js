@@ -3,17 +3,23 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { PlusIcon } from "@heroicons/react/solid";
 import Moves from "./Moves";
 import { MovesProvider } from "../contexts/MovesContext";
-import { updateWorkout } from "../libs/firebase";
+import { updateWorkout, updateMoves } from "../libs/firebase";
+import { arrayUnion } from "firebase/firestore";
 
 function EditWorkout(props) {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const workout = props.workouts
     .get(searchParams.get("main").trim())
     .filter((workout) => workout.subtitle === searchParams.get("title"))[0];
-  const navigate = useNavigate();
 
+  //CONTINUE FROM HERE
+  const [addMove, setAddMove] = useState(false);
+  const [newMove, setNewMove] = useState("");
   const [title, setTitle] = useState(workout.subtitle);
   const [description, setDescription] = useState(workout.description);
+  const [moves, setMoves] = useState(workout.moves);
 
   const closeModalHandler = () => {
     const originalLocation = `/workouts/${workout.title}`;
@@ -22,13 +28,38 @@ function EditWorkout(props) {
 
   const editWorkoutHandler = (event) => {
     event.preventDefault();
-    const newValue = {
+    console.log("editWorkoutHandler");
+    const newValues = {
       ...workout,
       subtitle: title,
       description: description,
     };
-    updateWorkout(workout.id, newValue);
-    console.log("I am being clicked");
+    updateWorkout(workout.id, newValues);
+  };
+
+  const addMoveHandler = (event) => {
+    event.preventDefault();
+    const newValue = {
+      title: newMove,
+      sets: [],
+    };
+    const newValues = {
+      ...workout,
+      moves: arrayUnion(newValue),
+    };
+    updateWorkout(workout.id, newValues);
+  };
+
+  const editMovesHandler = (moveName, newMoveInfo) => {
+    const updatedMoves = workout.moves.filter(
+      (workout) => workout.title !== moveName
+    );
+    updatedMoves.push(newMoveInfo);
+    const newValues = {
+      ...workout,
+      moves: updatedMoves,
+    };
+    updateWorkout(workout.id, newValues);
   };
 
   return (
@@ -36,7 +67,7 @@ function EditWorkout(props) {
       <h1 className="text-center text-white font-bold text-4xl py-2 mb-4">
         Edit your workout
       </h1>
-      <form action="POST" onSubmit={editWorkoutHandler}>
+      <form onSubmit={editWorkoutHandler}>
         <input
           aria-label="Your workout title"
           type="text"
@@ -55,20 +86,46 @@ function EditWorkout(props) {
         />
         <div>
           <h1 className="text-2xl text-yellow-50 font-bold">Moves</h1>
-          <MovesProvider>
-            <Moves />
-          </MovesProvider>
-          <button className="text-xl text-yellow-50 px-2 py-2 bg-green-800 rounded my-3">
+          {/* LOOKS LIKE I DONT NEED THE MOVESPROVIDER */}
+          {/* <MovesProvider moves={workout.moves} workoutID={workout.id}> */}
+          <Moves
+            moves={workout.moves}
+            workoutID={workout.id}
+            editMovesHandler={editMovesHandler}
+          />
+          {/* </MovesProvider> */}
+          <button
+            className="text-xl text-yellow-50 px-2 py-2 bg-green-800 rounded my-3"
+            onClick={() => setAddMove(!addMove)}
+          >
             Add a new move
             <PlusIcon className="-mr-1 ml-2 h-5 w-5 inline" />
           </button>
-
-          <button></button>
+          {addMove && (
+            <div>
+              <input
+                aria-label="Enter your move name"
+                type="text"
+                placeholder="Move Name"
+                className="mb-2 p-1 rounded"
+                value={newMove}
+                onChange={(event) => setNewMove(event.target.value)}
+              />
+              <button
+                className="ml-2 border-2 border-black px-2 rounded bg-slate-50 hover:bg-slate-400"
+                onClick={addMoveHandler}
+                type="button"
+              >
+                Add
+              </button>
+            </div>
+          )}
         </div>
         <div className="flex justify-between">
           <button
             className="bg-slate-300 p-2 rounded mb-4 font-bold"
             type="submit"
+            onClick={editWorkoutHandler}
           >
             Save
           </button>

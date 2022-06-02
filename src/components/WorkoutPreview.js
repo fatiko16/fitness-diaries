@@ -20,6 +20,12 @@ function WorkoutPreview(props) {
     event.stopPropagation();
     deleteWorkout(props.itemID);
   };
+
+  //Converting moves to a string with commas
+  const movesArray = props.moves.map((move) => move.title);
+  let movesString = "";
+  movesArray.forEach((move) => (movesString += move + ","));
+  movesString = movesString.slice(0, movesString.length - 1);
   return (
     <div
       className="bg-emerald-600 pt-2 pb-4 px-1 rounded mb-2 max-w-full cursor-pointer hover:m-10"
@@ -37,7 +43,7 @@ function WorkoutPreview(props) {
       </div>
       <div className="ml-2">
         <p className="text-xl">
-          <strong className="text-2xl">Moves:</strong> {props.moves}
+          <strong className="text-2xl">Moves:</strong> {movesString}
         </p>
       </div>
       <div className="flex justify-end">

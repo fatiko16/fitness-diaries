@@ -3,12 +3,18 @@ import MoveDropdown from "./MoveDropdown";
 import { useMoves } from "../contexts/MovesContext";
 //Component under EditWorkout
 
-function Moves() {
-  const { moves, setMoves } = useMoves();
+function Moves(props) {
   return (
     <div>
-      {moves &&
-        moves.map((move) => <MoveDropdown moveInfo={move} key={move.title} />)}
+      {props.moves &&
+        props.moves.map((move) => (
+          <MoveDropdown
+            moveInfo={move}
+            key={move.title}
+            workoutID={props.workoutID}
+            editMovesHandler={props.editMovesHandler}
+          />
+        ))}
     </div>
   );
 }

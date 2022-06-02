@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Dropdown from "../components/WorkoutTitleDropdown";
-import { Routes, Route, Outlet, useParams } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Outlet,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import CreateWorkoutTitle from "../components/CreateWorkoutTitle";
 import { useNavigate } from "react-router-dom";
 import WorkoutList from "../components/WorkoutList";
@@ -13,8 +19,12 @@ function Workouts() {
   const { workouts, titles, workoutMap } = useWorkouts();
   const params = useParams();
   const navigate = useNavigate();
-
-  const [workoutType, setWorkoutType] = useState(params["*"]);
+  const [searchParamas] = useSearchParams();
+  const isEditOn =
+    params["*"] === ROUTES.EDIT_WORKOUT.slice(1, ROUTES.EDIT_WORKOUT.length);
+  const [workoutType, setWorkoutType] = useState(
+    isEditOn ? searchParamas.get("main") : params["*"]
+  );
 
   useEffect(() => {
     document.title = "Fitness Diaries - My Workouts";

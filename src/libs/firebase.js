@@ -13,6 +13,9 @@ import {
   deleteDoc,
   doc,
   updateDoc,
+  arrayUnion,
+  FieldValue,
+  arrayRemove,
 } from "firebase/firestore";
 
 const userColRef = collection(db, "users");
@@ -126,8 +129,25 @@ export async function deleteWorkout(id) {
 
 export async function updateWorkout(id, newValues) {
   const docRef = doc(workoutsColsRef, id);
+  // console.log("updateWorkout ran");
   try {
     await updateDoc(docRef, newValues);
+  } catch (error) {
+    console.log("Something went wrong while updating a document.");
+    console.log(error);
+  }
+}
+
+export async function updateMoves(id, moveName, newValue) {
+  const docRef = doc(workoutsColsRef, id);
+
+  try {
+    await updateDoc(docRef, {
+      moves: arrayRemove(moveName),
+    });
+    // await updateDoc(docRef, {
+    //   moves: arrayUnion(newValue),
+    // });
   } catch (error) {
     console.log("Something went wrong while updating a document.");
     console.log(error);

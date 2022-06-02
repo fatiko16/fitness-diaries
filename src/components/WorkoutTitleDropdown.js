@@ -11,7 +11,6 @@ function classNames(...classes) {
 export default function Dropdown(props) {
   const navigate = useNavigate();
   const [chosenOption, setChosenOption] = useState(props.chosenWorkout);
-
   const changeOptionHandler = (option) => {
     setChosenOption(option);
     props.onOptionChange(option);

@@ -2,8 +2,8 @@ import React, { useContext, useState } from "react";
 import Modal from "../UI/Modal";
 import { useNavigate } from "react-router-dom";
 import UserContext from "../contexts/UserContext";
-import { createWorkoutTitle } from "../libs/firebase";
-
+import { createWorkoutTitle, updateUserTitles } from "../libs/firebase";
+import * as ROUTES from "../constants/routes";
 function CreateWorkoutTitle(props) {
   const user = useContext(UserContext);
   const [title, setTitle] = useState("");
@@ -12,7 +12,7 @@ function CreateWorkoutTitle(props) {
   const isInvalid = title === "" && subtitle === "";
   const navigate = useNavigate();
   const onClose = () => {
-    navigate("/workouts");
+    navigate(ROUTES.ALLWORKOUTS);
     props.onClose();
   };
 
@@ -21,21 +21,28 @@ function CreateWorkoutTitle(props) {
 
     if (isInvalid) {
       setError("Cannot submit the form with empty fields");
+      return;
     }
+
+    const trimmedTitle = title.trim();
+    const trimmedSubtitle = subtitle.trim();
     createWorkoutTitle(
-      title,
-      subtitle,
+      trimmedTitle,
+      trimmedSubtitle,
       user.user.uid,
       setTitle,
       setSubtitle,
       setError
     );
-    navigate("/workouts");
+
+    updateUserTitles(user.user.uid, title);
+    navigate("/workouts/" + title);
     props.onClose();
   };
   return (
     <Modal onClose={onClose}>
       <div className="flex flex-col mx-auto max-w-screen-md bg-slate-700 px-4 rounded-2xl">
+        {error && <p className="text-center text-red-500">{error}</p>}
         <h1 className="text-center text-purple-500 font-bold text-4xl py-2 mb-4">
           Create a title for your workouts!
         </h1>

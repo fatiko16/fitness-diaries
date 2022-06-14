@@ -13,9 +13,9 @@ import {
   deleteDoc,
   doc,
   updateDoc,
-  arrayUnion,
-  FieldValue,
   arrayRemove,
+  writeBatch,
+  arrayUnion,
 } from "firebase/firestore";
 
 const userColRef = collection(db, "users");
@@ -42,9 +42,9 @@ export async function signUp(
       displayName: username,
     });
     await addDoc(userColRef, {
-      userId: createdUser.user.uid,
-      username: username.toLowerCase(),
-      emailAdress: email.toLowerCase(),
+      userId: createdUser.user.uid.trim(),
+      username: username.toLowerCase().trim(),
+      emailAdress: email.toLowerCase().trim(),
       dateCreated: Date.now(),
     });
     setEmail("");
@@ -62,7 +62,7 @@ export async function signUp(
 
 export async function logIn(email, password, setEmail, setPassword, setError) {
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    await signInWithEmailAndPassword(auth, email.trim(), password.trim());
     setEmail("");
     setPassword("");
   } catch (error) {
@@ -71,6 +71,7 @@ export async function logIn(email, password, setEmail, setPassword, setError) {
     setError(error.message);
   }
 }
+
 //Used in CreateWorkoutTitle.js
 export async function createWorkoutTitle(
   title,
@@ -82,12 +83,14 @@ export async function createWorkoutTitle(
 ) {
   try {
     await addDoc(workoutsColsRef, {
-      title: title,
-      subtitle: subtitle,
+      title: title.trim(),
+      subtitle: subtitle.trim(),
       description: "",
       moves: [],
-      userID: userID,
+      userID: userID.trim(),
+      dateCreated: Date.now(),
     });
+
     setTitle("");
     setSubtitle("");
   } catch (error) {
@@ -95,6 +98,24 @@ export async function createWorkoutTitle(
     console.log("Something went wrong while creating a new title");
   }
 }
+//Can add this function to create Workout Title
+export async function updateUserTitles(userId, title) {
+  //Need to update titles array in user for new titles
+  try {
+    const q = query(userColRef, where("userId", "==", userId));
+    const data = await getDocs(q);
+    const docRef = data.docs[0].ref;
+    await updateDoc(docRef, {
+      titles: arrayUnion(title.trim()),
+    });
+  } catch (error) {
+    console.log(error);
+    console.log(
+      "Something went wrong updating user titles while creating a new title"
+    );
+  }
+}
+
 //Used in AddWorkout.js
 export async function createNewWorkout(
   mainTitle,
@@ -105,11 +126,12 @@ export async function createNewWorkout(
 ) {
   try {
     await addDoc(workoutsColsRef, {
-      title: mainTitle,
-      subtitle: title,
-      description: description,
+      title: mainTitle.trim(),
+      subtitle: title.trim(),
+      description: description.trim(),
       moves: [],
       userID,
+      dateCreated: Date.now(),
     });
   } catch (error) {
     setError(error.message);
@@ -127,9 +149,39 @@ export async function deleteWorkout(id) {
   }
 }
 
+export async function deleteTitle(title, userID) {
+  try {
+    console.log(title);
+    const q = query(workoutsColsRef, where("title", "==", title));
+    const querySnapshot = await getDocs(q);
+    const batch = writeBatch(db);
+    querySnapshot.forEach((data) => {
+      console.log(data.data(), data.id);
+      if (data.id) {
+        const docRef = doc(workoutsColsRef, data.id);
+        deleteDoc(docRef);
+      }
+    });
+
+    const q1 = query(userColRef, where("userId", "==", userID));
+    const data = await getDocs(q1);
+    const docRef = data.docs[0].ref;
+    await updateDoc(docRef, {
+      titles: arrayRemove(title),
+    });
+    await batch.commit();
+  } catch (error) {
+    console.log(
+      "Something went wrong while deleting all workouts under a title"
+    );
+    console.log(error);
+  }
+}
+
 export async function updateWorkout(id, newValues) {
   const docRef = doc(workoutsColsRef, id);
   // console.log("updateWorkout ran");
+
   try {
     await updateDoc(docRef, newValues);
   } catch (error) {
@@ -152,16 +204,4 @@ export async function updateMoves(id, moveName, newValue) {
     console.log("Something went wrong while updating a document.");
     console.log(error);
   }
-}
-
-export async function getDocsOnce(userID) {
-  const q = query(collection(db, "workouts"), where("userID", "==", userID));
-
-  const querySnapshot = await getDocs(q);
-  const data = [];
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-    data.push(doc.data());
-  });
-  return data;
 }

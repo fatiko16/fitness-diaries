@@ -1,5 +1,5 @@
 /* This example requires Tailwind CSS v2.0+ */
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useNavigate } from "react-router-dom";
@@ -11,12 +11,16 @@ function classNames(...classes) {
 export default function Dropdown(props) {
   const navigate = useNavigate();
   const [chosenOption, setChosenOption] = useState(props.chosenWorkout);
+
   const changeOptionHandler = (option) => {
     setChosenOption(option);
     props.onOptionChange(option);
     navigate(option);
   };
 
+  useEffect(() => {
+    setChosenOption(props.chosenWorkout);
+  }, [props.chosenWorkout]);
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
